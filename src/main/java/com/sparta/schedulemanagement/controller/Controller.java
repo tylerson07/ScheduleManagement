@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -16,14 +17,19 @@ import java.util.Map;
 public class Controller {
 private Map<Integer,Schedule> ScheduleList = new HashMap<>();
 
-Integer Count=0;
+Integer Date=0;
 public ScheduleResponseDto createSchedule(@RequestBody ScheduleRequestDto requestDto){
     Schedule schedule = new Schedule(requestDto);
 
-     Count++;
-     ScheduleList.put(Count,schedule);
+     Date++;
+     ScheduleList.put(Date,schedule);
       ScheduleResponseDto scheduleResponseDto = new ScheduleResponseDto(schedule);
       return scheduleResponseDto;
 
+}
+
+public List<ScheduleResponseDto> getSchedule(){
+
+    return null;
 }
 }
