@@ -48,10 +48,12 @@ public List<Schedule> getSchedule(){
 
 }
 @DeleteMapping("/memos/id")
-    public String deleteSchedule(@PathVariable Integer count, @RequestBody ScheduleRequestDto requestDto){
+    public String deleteSchedule(@PathVariable Integer count, @RequestBody ScheduleRequestDto requestDto,@PathVariable int password){
     if(ScheduleList.containsKey(count)){
-       ScheduleList.remove(count);
-        return "deleted schedule";
+        if(ScheduleList.get(count).getPassword()==password) {
+            ScheduleList.remove(count);
+            return "deleted schedule";
+        }else {throw new IllegalArgumentException("비밀번호가 일치하지읺습니다");}
     } else {
         throw new IllegalArgumentException("존재하지 않습니다");
     }
