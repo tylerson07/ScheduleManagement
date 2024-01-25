@@ -1,13 +1,10 @@
 package com.sparta.schedulemanagement.controller;
 
 import com.sparta.schedulemanagement.dto.ScheduleRequestDto;
-import com.sparta.schedulemanagement.dto.ScheduleResponseDto;
 import com.sparta.schedulemanagement.entity.Schedule;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,19 +14,48 @@ import java.util.Map;
 public class Controller {
 private Map<Integer,Schedule> ScheduleList = new HashMap<>();
 
-Integer Date=0;
-public ScheduleResponseDto createSchedule(@RequestBody ScheduleRequestDto requestDto){
+Integer count = 0;
+@PostMapping("/Schedule")
+public Schedule createSchedule(@RequestBody ScheduleRequestDto requestDto){
     Schedule schedule = new Schedule(requestDto);
 
-     Date++;
-     ScheduleList.put(Date,schedule);
-      ScheduleResponseDto scheduleResponseDto = new ScheduleResponseDto(schedule);
-      return scheduleResponseDto;
+
+     ScheduleList.put(count, schedule);
+    count++;
+
+    return schedule;
+
+}
+@GetMapping("/Schedule")
+public List<Schedule> getSchedule(){
+    List<Schedule> ListSchedule= new ArrayList<>();
+     for(int i=0;i<ScheduleList.size();i++){
+          ListSchedule.add(ScheduleList.get(i));
+
+     }
+   return ListSchedule;
+}
+
+@PutMapping("/memos/{id}")
+    public String updateMemo(@PathVariable Integer count, @RequestBody ScheduleRequestDto requestDto){
+    if(ScheduleList.containsKey(count)){
+          Schedule schedule = ScheduleList.get(count);
+          schedule.update(requestDto);
+            return "updated changes";
+    } else {
+        throw new IllegalArgumentException("존재하지 않습니다");
+    }
+
+}
+@DeleteMapping("/memos/id")
+    public String deleteSchedule(@PathVariable Integer count, @RequestBody ScheduleRequestDto requestDto){
+    if(ScheduleList.containsKey(count)){
+       ScheduleList.remove(count);
+        return "deleted schedule";
+    } else {
+        throw new IllegalArgumentException("존재하지 않습니다");
+    }
 
 }
 
-public List<ScheduleResponseDto> getSchedule(){
-
-    return null;
-}
 }
